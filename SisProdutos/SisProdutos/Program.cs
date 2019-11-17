@@ -1,4 +1,5 @@
-﻿using System;
+using System;
+using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Text.RegularExpressions;
 using SisProdutos.models;
@@ -199,16 +200,22 @@ namespace SisProdutos
                                 var resultTest = categoryService.CategoryTest(category);
                                 if (resultTest)
                                 {
-                                    product.Category = category;
-                                    productService.AddProduct(product);
+
+                                    category.Products = new List<Product>();
+
+                                    category.Products.Add(product);
                                     categoryService.AddCategory(category);
+                                    productService.AddProduct(product);
                                     Console.WriteLine("Categoria criada com sucesso!");
                                     
 
                                 }
                                 else
                                 {
-                                    product.Category = category;
+                                    var categoriaQExist = categoryService.CategoryReturn(category);
+
+
+                                    categoriaQExist.Products.Add(product);
                                     productService.AddProduct(product);
                                     Console.WriteLine("Essa categoria já existe!");
                                     Console.WriteLine("O produto foi adicionado a esta categoria!");
